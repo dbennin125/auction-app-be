@@ -21,7 +21,16 @@ describe('auction routes', () => {
     return mongod.stop();
   });
 
-  it('will authenticate a route with email and password', () => {
-
+  it('will authenticate a route with email and password via POST', () => {
+    return request(app)
+      .post('/api/v1/auth/signup')
+      .send({
+        email: 'yep@no.com',
+        password: 'donotshow'
+      })
+      .then(res => expect(res.body).toEqual({
+        _id: expect.anything(),
+        email: 'yep@no.com'
+      }));
   });
 });
