@@ -20,5 +20,8 @@ describe('auction routes', () => {
     await mongoose.connection.close();
     return mongod.stop();
   });
-  it('will authenticate a route with email and password');
+
+  it('will authenticate a route with email and password', () => {
+
+  });
 });
