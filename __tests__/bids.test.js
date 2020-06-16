@@ -8,6 +8,7 @@ const app = require('../lib/app');
 
 const User = require('../lib/models/User');
 const Auction = require('../lib/models/Auction');
+const Bid = require('../lib/models/Bid');
 
 
 
@@ -62,6 +63,37 @@ describe('auction routes', () => {
           price: 20,
           quantity: 1,
           user: user.id,
+          accepted: false
+        });
+      });
+  });
+
+  it('gets a bid by ID via GET', async() => {
+    const bid = await Bid.create({
+      user: user._id,
+      auction: auction._id,
+      price: 10,
+      quantity: 1,
+      accepted: false
+    });
+    
+    return request(app)
+      .get(`/api/v1/bids/${bid._id}`)
+      .auth('yep@no.com', 'donotshow')
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.anything(),
+          auction: {
+            _id: auction.id,
+            description: auction.description,
+            title: auction.title
+          },
+          user: {
+            _id: user.id,
+            email: user.email
+          },
+          price: 10,
+          quantity: 1,
           accepted: false
         });
       });
