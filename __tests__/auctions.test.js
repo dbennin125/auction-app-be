@@ -20,13 +20,14 @@ describe('auction routes', () => {
   });
   
   let user;
+  let auction; 
   beforeEach(async() => {
+    let bid;
     user = await User.create({
       email: 'yep@no.com',
       password: 'donotshow'
     });
   });
-  let auction; 
   beforeEach(async() => {
     auction = await Auction.create({
       user: user.id,
@@ -36,7 +37,6 @@ describe('auction routes', () => {
       expires: Date.now()
     });
   });
-  let bid;
   beforeEach(async() => {
     bid = await Bid.create({
       auction: auction.id,
@@ -84,6 +84,7 @@ describe('auction routes', () => {
       quantity: 2,
       expires: Date.now()
     });
+    
     return request(app)
       .get(`/api/v1/auctions/${auction._id}`)
       .auth('yep@no.com', 'donotshow')
@@ -97,6 +98,57 @@ describe('auction routes', () => {
           quantity: 2,
           expires: expect.anything()
         });
+      });
+  });
+
+  it('gets all auctions via GET', async() => {
+    await Auction.create(
+      [
+        {
+          user: user.id,
+          title: 'Stuff',
+          description: 'This is some stuff',
+          quantity: 2,
+          expires: Date.now()
+        },
+        {
+          user: user.id,
+          title: 'Not Stuff',
+          description: 'This is not stuff',
+          quantity: 3,
+          expires: Date.now()
+        }
+      ]);
+    return request(app)
+      .get('/api/v1/auctions')
+      .auth('yep@no.com', 'donotshow')
+      .then(res => {
+        expect(res.body).toEqual([  
+          {
+            _id: expect.anything(),
+            description: 'This is some stuff',
+            expires: expect.anything(),
+            quantity: 2,
+            title: 'Stuff',
+            user: expect.anything(),
+          },
+          {
+            _id: expect.anything(),
+            description: 'This is some stuff',
+            expires: expect.anything(),
+            quantity: 2,
+            title: 'Stuff',
+            user: expect.anything(),
+          },
+          {
+            _id: expect.anything(),
+            description: 'This is not stuff',
+            expires: expect.anything(),
+            quantity: 3,
+            title: 'Not Stuff',
+            user: expect.anything(),
+          },
+        ]);
       });
   });
 });
