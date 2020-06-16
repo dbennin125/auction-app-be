@@ -68,6 +68,36 @@ describe('auction routes', () => {
       });
   });
 
+  it('updates a bid instead via POST', async() => {
+    const bid = await Bid.create({
+      user: user._id,
+      auction: auction._id,
+      price: 20,
+      quantity: 1,
+      accepted: false
+    });
+
+    return request(app)
+      .post('/api/v1/bids')
+      .auth('yep@no.com', 'donotshow')
+      .send({
+        auction: bid.auction,
+        price: 5,
+        quantity: 2,
+        accepted: false
+      })
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.anything(),
+          auction: auction.id,
+          price: 5,
+          quantity: 2,
+          user: user.id,
+          accepted: false
+        });
+      });
+  });
+
   it('gets a bid by ID via GET', async() => {
     const bid = await Bid.create({
       user: user._id,
