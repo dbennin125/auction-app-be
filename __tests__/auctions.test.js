@@ -21,8 +21,8 @@ describe('auction routes', () => {
   
   let user;
   let auction; 
+  let bid;
   beforeEach(async() => {
-    let bid;
     user = await User.create({
       email: 'yep@no.com',
       password: 'donotshow'
