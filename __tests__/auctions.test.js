@@ -128,25 +128,19 @@ describe('auction routes', () => {
             _id: expect.anything(),
             description: 'This is some stuff',
             expires: expect.anything(),
-            quantity: 2,
             title: 'Stuff',
-            user: expect.anything(),
           },
           {
             _id: expect.anything(),
             description: 'This is some stuff',
             expires: expect.anything(),
-            quantity: 2,
             title: 'Stuff',
-            user: expect.anything(),
           },
           {
             _id: expect.anything(),
             description: 'This is not stuff',
             expires: expect.anything(),
-            quantity: 3,
             title: 'Not Stuff',
-            user: expect.anything(),
           },
         ]);
       });
