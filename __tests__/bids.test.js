@@ -98,4 +98,28 @@ describe('auction routes', () => {
         });
       });
   });
+
+  it('deletes a bid by ID via DELETE', async() => {
+    const bid = await Bid.create({
+      user: user._id,
+      auction: auction._id,
+      price: 10,
+      quantity: 1,
+      accepted: false
+    });
+    
+    return request(app)
+      .delete(`/api/v1/bids/${bid._id}`)
+      .auth('yep@no.com', 'donotshow')
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: expect.anything(),
+          user: user.id,
+          auction: auction.id,
+          price: 10,
+          quantity: 1,
+          accepted: false,
+        });
+      });
+  });
 });
